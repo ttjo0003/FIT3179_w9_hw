@@ -1,0 +1,44 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 900,
+  "height": 500,
+  "background": "#f5f5f5",
+  "data": {
+    "url": "https://vega.github.io/vega-datasets/data/world-110m.json",
+    "format": {"type": "topojson", "feature": "countries"} 
+  },
+  "transform": [
+    {
+      "lookup": "id",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/ttjo0003/FIT3179_w9_hw/refs/heads/main/global_inflation_long_new.csv"
+        },
+        "key": "ISO_NUM",
+        "fields": ["inflation", "year", "country_name", "ISO3"]
+      }
+    }
+  ],
+  "projection": {"type": "equalEarth"},
+  "mark": {"type": "geoshape",
+            "stroke": "#bbbbbb",
+            "strokeWidth": 0.5
+        },
+  "encoding": {
+    "color": {
+      "field": "inflation",
+      "type": "quantitative",
+      "title": "Inflation Rate (2024)",
+      "scale": {"scheme": "orangered",
+      "domain": [0, 8],
+    "clamp": true},
+      "condition": {"test": "datum.inflation == null", "value": "lightgrey"}
+    },
+    "tooltip": [
+  {"field": "ISO3", "type": "nominal"},
+  {"field": "country_name", "type": "nominal"},
+  {"field": "inflation", "type": "quantitative"},
+  {"field": "year", "type": "ordinal"}
+    ]
+  }
+}
